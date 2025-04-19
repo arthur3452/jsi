@@ -5,7 +5,6 @@ body {
 	justify-content: center;
 	flex-direction: column;
 	font-family: Poppins, sans-serif;
-	font-weight: 500;
 	background-color: #f7fdff;
 }
 .topbar {
@@ -18,7 +17,6 @@ body {
 	gap: 30px;
 	width: 100vw;
 	height: 65px;
-	font-weight: 500;
 }
 .topbar nav {
 	display: flex;
