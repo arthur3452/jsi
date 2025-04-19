@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>JavaScript Interpreter</title>
+    <link rel="stylesheet" href="intstyles.css">
+    <link rel="icon" href="logo.ico">
+</head>
+<body>
+    <div class="topbar">
+        <div class="logo">
+			<h2 class="js">js</h2>
+			<h2> I</h2>
+        </div>
+        <nav>
+            <a href="https://arthur3452.github.io/jsi/int/interpreter.html">Start Coding</a>
+            <a href="https://www.youtube.com/watch?v=kRz69AsUCkQ" id="tutorial" onclick="change()">Tutorial</a>
+            <a href="https://github.com/arthur3452">Github</a>
+        </nav>
+        <script>
+            function change() {
+                document.getElementById("tutorial").textContent = "not mine";
+            }
+        </script>
+    </div>
+    <div class="everything">
+        <button onclick="run()">Run Code</button>
+        <div class="textareas">
+            <textarea id="codearea" cols="45" rows="25">console.log('Hello, World!');</textarea>
+            <textarea readonly cols="45" rows="25" id="res"></textarea>
+        </div>
+        <script>
+            function console_log_simulator(text) {
+                document.getElementById("res").value += text + '\n';
+            }
+
+            const originalConsoleLog = console.log;
+            console.log = console_log_simulator;
+
+            function run() {
+                let input = document.getElementById("codearea");
+                let code = input.value;
+                document.getElementById("res").value = ""; // Clear previous output
+
+                try {
+                    eval(code);
+                } catch (error) {
+                    document.getElementById("res").value = "Error: " + error;
+                }
+
+                // Restore the original console.log (important if other parts of your page rely on it)
+                console.log = originalConsoleLog;
+            }
+
+            document.addEventListener('DOMContentLoaded', function() {
+                const codeArea = document.getElementById('codearea');
+
+                codeArea.addEventListener('keydown', function(event) {
+                    // Auto-close parentheses, curly braces, square brackets, and quotes
+                    if (event.key === '(') {
+                        insertAtCursor(this, '()');
+                        this.selectionStart--;
+                        event.preventDefault();
+                    } else if (event.key === '{') {
+                        insertAtCursor(this, '{}');
+                        this.selectionStart--;
+                        event.preventDefault();
+                    } else if (event.key === '[') {
+                        insertAtCursor(this, '[]');
+                        this.selectionStart--;
+                        event.preventDefault();
+                    } else if (event.key === '"') {
+                        insertAtCursor(this, '""');
+                        this.selectionStart--;
+                        event.preventDefault();
+                    } else if (event.key === "'") {
+                        insertAtCursor(this, "''");
+                        this.selectionStart--;
+                        event.preventDefault();
+                    }
+
+                    // Indent with 3 spaces on Tab
+                    if (event.key === 'Tab') {
+                        event.preventDefault();
+                        insertAtCursor(this, '   ');
+                    }
+					if (event.key === 'Enter') {
+                        const cursorPosition = this.selectionStart;
+                        const textBeforeCursor = this.value.substring(0, cursorPosition);
+                        const lines = textBeforeCursor.split('\n');
+                        const lastLine = lines[lines.length - 1];
+                        const trimmedLastLine = lastLine.trim();
+
+                        if (trimmedLastLine.startsWith('if (') || trimmedLastLine.startsWith('if(') || trimmedLastLine.endsWith('{')) {
+                            event.preventDefault();
+                            insertAtCursor(this, '\n   ');
+                        } else {
+                            // If not inside an 'if' block, just insert a newline
+                            insertAtCursor(this, '\n');
+                        }
+                    }
+                });
+
+                function insertAtCursor(textArea, textToInsert) {
+                    const startPos = textArea.selectionStart;
+                    const endPos = textArea.selectionEnd;
+                    const scrollTop = textArea.scrollTop;
+                    textArea.value = textArea.value.substring(0, startPos) + textToInsert + textArea.value.substring(endPos, textArea.value.length);
+                    textArea.selectionStart = startPos + textToInsert.length;
+                    textArea.selectionEnd = startPos + textToInsert.length;
+                    textArea.scrollTop = scrollTop;
+                }
+            });
+        </script>
+    </div>
+	<h1 class="jsc">JavaScript Commands:</h1>
+	<h3>"console.log(' ');": prints text on the console.</h3>
+	<h3>"const [name] = 0": defines a variable.</h3>
+	<h3>"let [name] = 0": also defines a variable.</h3>
+	<h3>"const [name] = prompt(' ')": gives a prompt to the user to define the variable.</h3>
+	<h3>"alert(' ')": gives a warning inside a window.</h3>
+	<h3>"function name() {}": defines a function.</h3>
+	<h3>"function()": executes the function you defined.</h3>
+</body>
+</html>
